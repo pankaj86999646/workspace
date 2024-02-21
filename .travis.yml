@@ -5,11 +5,11 @@ jobs:
         - echo "new file" > A.txt
       workspaces:
         create:
-          name: newworspace
+          name: ws1
           paths:
             - A.txt
     - stage: use_cache
       workspaces:
-        use: workspace2
+        use: ws1
       script:
         - cat A.txt || true
