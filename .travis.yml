@@ -1,0 +1,15 @@
+jobs:
+  include:
+    - stage: warm_cache
+      script:
+        - echo "new file" > A.txt
+      workspaces:
+        create:
+          name: newworspace
+          paths:
+            - A.txt
+    - stage: use_cache
+      workspaces:
+        use: workspace2
+      script:
+        - cat A.txt || true
