@@ -1,51 +1,15 @@
 jobs:
   include:
-    - stage: Build and Test
-      name: "Job A"
+    - stage: warm_cache
       script:
-        - echo "Building Job A"
-        - echo "Running tests for Job A"
-        - mkdir -p workspace-a
-        - echo "This is data from Job A" > workspace-a/data-A.txt
+        - echo "foo" > A.txt
       workspaces:
         create:
-          name: workspace-a
+          name: workspace2
           paths:
-            - workspace-a
-
-    - name: "Job B"
-      script:
-        - echo "Building Job B"
-        - echo "Running tests for Job B"
-        - mkdir -p workspace-b
-        - echo "This is data from Job B" > workspace-b/data-B.txt
+            - foo.txt
+    - stage: use_cache
       workspaces:
-        create:
-          name: workspace-b
-          paths:
-            - workspace-b
-
-    - name: "Job C"
+        use: workspace2
       script:
-        - echo "Building Job C"
-        - echo "Running tests for Job C"
-        - mkdir -p workspace-c
-        - echo "This is data from Job C" > workspace-c/data-C.txt
-      workspaces:
-        create:
-          name: workspace-c
-          paths:
-            - workspace-c
-
-    - stage: Deploy
-      name: "Deploy"
-      script:
-        - echo "Deploying using artifacts from Job A Job B and Job C"
-        - cat workspace-a/data-A.txt
-        - cat workspace-b/data-B.txt
-        - cat workspace-c/data-C.txt
-      workspaces:
-        use:
-          - workspace-a
-          - workspace-b
-          - workspace-c
+        - cat A.txt || true
